@@ -61,6 +61,25 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
+const displayMovements = movements => {
+  containerMovements.innerHTML = '';
+  movements.forEach((mov, i) => {
+    // console.log(mov);
+    const html = `
+    <div class="movements__row">
+      <div class="movements__type movements__type--${
+        mov > 0 ? 'deposit' : 'withdrawal'
+      }">${i + 1} ${mov > 0 ? 'Deposit' : 'Withdrawal'}</div>
+       <div class="movements__date">2 days ago</div>
+         <div class="movements__value">${mov}€</div>
+           </div>
+`;
+    containerMovements.insertAdjacentHTML('afterbegin', html);
+  });
+};
+
+displayMovements(account1.movements);
+
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
@@ -146,5 +165,3 @@ const currencies = new Map([
 //     console.log(`Movement ${i + 1} yor are withdraw ${Math.abs(movement)} tk`);
 //   }
 // });
-
-
