@@ -80,6 +80,64 @@ const displayMovements = movements => {
 
 displayMovements(account1.movements);
 
+const printBlance = mov => {
+  const blance = mov.reduce((acc, cur) => {
+    return acc + cur;
+  }, 0);
+
+  // console.log(blance);
+
+  labelBalance.textContent = `${blance}€`;
+};
+
+printBlance(account1.movements);
+
+const calcDisplaySummury = movements => {
+  const income = movements
+    .filter(mov => mov > 0)
+    .reduce((acc, cur) => acc + cur, 0);
+  labelSumIn.textContent = `${income} €`;
+
+  const out = movements
+    .filter(mov => mov < 0)
+    .reduce((acc, cur) => acc + cur, 0);
+  labelSumOut.textContent = `${Math.abs(out)} €`;
+
+  const interest = movements
+    .filter(mov => mov > 0)
+    .map(mov => (mov * 1.2) / 100)
+    .filter(mov => mov >= 1)
+    .reduce((acc, cur) => acc + cur, 0);
+  labelSumInterest.textContent = `${interest} €`;
+};
+
+calcDisplaySummury(account1.movements);
+
+const createUserNames = accs => {
+  accs.forEach(user => {
+    user.username = user.owner
+      .toLowerCase()
+      .split(' ')
+      .map(item => item[0])
+      .join('');
+  });
+};
+
+createUserNames(accounts);
+// console.log(accounts);
+
+const deposit = depo => {
+  return depo.filter(mov => mov > 0);
+};
+
+// console.log(deposit(account1.movements));
+
+function withdrawal(withdr) {
+  return withdr.filter(mov => mov < 0);
+}
+
+// console.log(withdrawal(account1.movements));
+
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
@@ -165,3 +223,47 @@ const currencies = new Map([
 //     console.log(`Movement ${i + 1} yor are withdraw ${Math.abs(movement)} tk`);
 //   }
 // });
+
+// Array Chelleange 1
+
+// const checkDogs = (dogsJulia, dogsKate) => {
+//   const copy = dogsJulia.slice(1, -2);
+//   // console.log(copy);
+//   const allData = dogsJulia.concat(dogsKate);
+//   // console.log(allData);
+//   allData.forEach((age, i) => {
+//     const ages =
+//       age >= 3
+//         ? `Dog number ${i + 1} is an adult, and is ${age} years old`
+//         : `Dog number ${i + 1} is still a puppy`;
+//     console.log(ages);
+//   });
+
+//   // const ages = allData.map((age, i) => {
+//   //   return age >= 3
+//   //     ? `Dog number ${i + 1} is an adult, and is ${age} years old`
+//   //     : `Dog number ${i + 1} is still a puppy`;
+//   // });
+
+//   // return ages;
+// };
+
+// console.log(checkDogs([3, 5, 2, 12, 7], [4, 1, 15, 8, 3]));
+
+// Coding chellege 2
+
+// const calcAverageHumanAge = ages => {
+//   const humanages = ages.map(age => (age <= 2 ? 2 * age : 16 + age * 4));
+//   console.log(humanages);
+//   const filter = humanages.filter(age => age >= 18);
+//   console.log(filter);
+//   const average = filter.reduce((acc, cur) => {
+//     return (acc * cur) / 100;
+//   }, filter[0]);
+
+//   console.log(average);
+// };
+
+// calcAverageHumanAge([5, 2, 4, 1, 15, 8, 3]);
+
+// calcAverageHumanAge([3, 5, 6]);
