@@ -125,6 +125,20 @@ const createUserNames = accs => {
 
 createUserNames(accounts);
 // console.log(accounts);
+let currentAccount;
+
+btnLogin.addEventListener('click', e => {
+  e.preventDefault();
+  currentAccount = accounts.find(
+    acc => acc.username === inputLoginUsername.value
+  );
+  console.log(currentAccount);
+
+  if (currentAccount?.pin === Number(inputLoginPin.value)) {
+    containerApp.style.opacity = '100';
+  }
+  // console.log(typeof inputLoginPin.value);
+});
 
 const deposit = depo => {
   return depo.filter(mov => mov > 0);
@@ -135,6 +149,22 @@ const deposit = depo => {
 function withdrawal(withdr) {
   return withdr.filter(mov => mov < 0);
 }
+
+// Frist withdrawl
+
+// const fristWithdrawal = account1.movements.find(item => item < 0);
+// console.log(fristWithdrawal);
+
+// const fristWithdrawal = withdrawal => {
+//   return withdrawal.find(item => item < 0);
+// };
+
+// console.log(fristWithdrawal(account1.movements));
+
+// console.log(accounts);
+
+// const account = accounts.find(acc => acc.owner === 'Sarah Smith');
+// console.log(account);
 
 // console.log(withdrawal(account1.movements));
 
@@ -267,3 +297,5 @@ const currencies = new Map([
 // calcAverageHumanAge([5, 2, 4, 1, 15, 8, 3]);
 
 // calcAverageHumanAge([3, 5, 6]);
+
+// Find Method
