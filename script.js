@@ -172,6 +172,20 @@ btnTransfer.addEventListener('click', e => {
   // transfer.movements.push(amount);
 });
 
+btnClose.addEventListener('click', e => {
+  e.preventDefault();
+  if (
+    currentAccount.username === inputCloseUsername.value &&
+    currentAccount.pin === Number(inputClosePin.value)
+  ) {
+    const index = accounts.findIndex(
+      acc => acc.username === currentAccount.username
+    );
+    accounts.splice(index, 1);
+    containerApp.style.opacity = 0;
+  }
+});
+
 console.log(accounts);
 
 const deposit = depo => {
