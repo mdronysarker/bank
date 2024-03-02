@@ -78,41 +78,6 @@ const displayMovements = movements => {
   });
 };
 
-displayMovements(account1.movements);
-
-const printBlance = mov => {
-  const blance = mov.reduce((acc, cur) => {
-    return acc + cur;
-  }, 0);
-
-  // console.log(blance);
-
-  labelBalance.textContent = `${blance}€`;
-};
-
-printBlance(account1.movements);
-
-const calcDisplaySummury = movements => {
-  const income = movements
-    .filter(mov => mov > 0)
-    .reduce((acc, cur) => acc + cur, 0);
-  labelSumIn.textContent = `${income} €`;
-
-  const out = movements
-    .filter(mov => mov < 0)
-    .reduce((acc, cur) => acc + cur, 0);
-  labelSumOut.textContent = `${Math.abs(out)} €`;
-
-  const interest = movements
-    .filter(mov => mov > 0)
-    .map(mov => (mov * 1.2) / 100)
-    .filter(mov => mov >= 1)
-    .reduce((acc, cur) => acc + cur, 0);
-  labelSumInterest.textContent = `${interest} €`;
-};
-
-calcDisplaySummury(account1.movements);
-
 const createUserNames = accs => {
   accs.forEach(user => {
     user.username = user.owner
@@ -124,6 +89,42 @@ const createUserNames = accs => {
 };
 
 createUserNames(accounts);
+
+const updateUi = acc => {
+  displayMovements(acc.movements);
+  printBlance(acc);
+  calcDisplaySummury(acc);
+};
+
+const printBlance = acc => {
+  acc.blance = acc.movements.reduce((acc, cur) => {
+    return acc + cur;
+  }, 0);
+
+  // console.log(blance);
+
+  labelBalance.textContent = `${acc.blance}€`;
+};
+
+const calcDisplaySummury = acc => {
+  const income = acc.movements
+    .filter(mov => mov > 0)
+    .reduce((acc, cur) => acc + cur, 0);
+  labelSumIn.textContent = `${income} €`;
+
+  const out = acc.movements
+    .filter(mov => mov < 0)
+    .reduce((acc, cur) => acc + cur, 0);
+  labelSumOut.textContent = `${Math.abs(out)} €`;
+
+  const interest = acc.movements
+    .filter(mov => mov > 0)
+    .map(mov => (mov * acc.interestRate) / 100)
+    .filter(mov => mov >= 1)
+    .reduce((acc, cur) => acc + cur, 0);
+  labelSumInterest.textContent = `${interest} €`;
+};
+
 // console.log(accounts);
 let currentAccount;
 
@@ -132,13 +133,46 @@ btnLogin.addEventListener('click', e => {
   currentAccount = accounts.find(
     acc => acc.username === inputLoginUsername.value
   );
-  console.log(currentAccount);
+  // console.log(currentAccount);
 
   if (currentAccount?.pin === Number(inputLoginPin.value)) {
     containerApp.style.opacity = '100';
+    inputLoginUsername.value = '';
+    inputLoginPin.value = '';
+    inputLoginPin.blur();
+    labelWelcome.textContent = `welcome to ${
+      currentAccount.owner.split(' ')[0]
+    }`;
+    updateUi(currentAccount);
+  } else {
+    containerApp.style.opacity = 0;
   }
   // console.log(typeof inputLoginPin.value);
 });
+
+btnTransfer.addEventListener('click', e => {
+  e.preventDefault();
+  const amount = Number(inputTransferAmount.value);
+  const reciveAcc = inputTransferTo.value;
+  const transfer = accounts.find(acc => acc.username === reciveAcc);
+  inputTransferAmount.value = '';
+  inputTransferTo.value = '';
+  if (
+    amount > 0 &&
+    transfer &&
+    currentAccount?.blance >= amount &&
+    currentAccount?.username !== transfer.username
+  ) {
+    currentAccount.movements.push(-amount);
+    transfer.movements.push(amount);
+
+    updateUi(currentAccount);
+  }
+
+  // transfer.movements.push(amount);
+});
+
+console.log(accounts);
 
 const deposit = depo => {
   return depo.filter(mov => mov > 0);
@@ -299,3 +333,13 @@ const currencies = new Map([
 // calcAverageHumanAge([3, 5, 6]);
 
 // Find Method
+
+// const a = {
+//   value: 'hello',
+// };
+
+// const b = {
+//   value: 'world',
+// };
+
+// console.log(a + b);
