@@ -61,9 +61,10 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
-const displayMovements = movements => {
+const displayMovements = (movements, sort = false) => {
   containerMovements.innerHTML = '';
-  movements.forEach((mov, i) => {
+  const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
+  movs.forEach((mov, i) => {
     // console.log(mov);
     const html = `
     <div class="movements__row">
@@ -186,6 +187,17 @@ btnClose.addEventListener('click', e => {
   }
 });
 
+btnLoan.addEventListener('click', e => {
+  e.preventDefault();
+  const amount = Number(inputLoanAmount.value);
+  if (amount > 0 && currentAccount.movements.some(mov => mov > amount * 0.1)) {
+    currentAccount.movements.push(amount);
+    updateUi(currentAccount);
+  }
+
+  inputLoanAmount.value = '';
+});
+
 console.log(accounts);
 
 const deposit = depo => {
@@ -197,6 +209,14 @@ const deposit = depo => {
 function withdrawal(withdr) {
   return withdr.filter(mov => mov < 0);
 }
+
+let sorted = false;
+
+btnSort.addEventListener('click', e => {
+  e.preventDefault();
+  displayMovements(currentAccount.movements, !sorted);
+  sorted = !sorted;
+});
 
 // Frist withdrawl
 
@@ -357,3 +377,6 @@ const currencies = new Map([
 // };
 
 // console.log(a + b);
+
+// const arr = [[1, 2, 3], [4, 5, 6], 7, 8];
+// console.log(arr.flat());
