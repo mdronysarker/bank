@@ -114,8 +114,8 @@ const calcDisplaySummury = acc => {
   labelSumIn.textContent = `${income} €`;
 
   const out = acc.movements
-    .filter(mov => mov < 0)
-    .reduce((acc, cur) => acc + cur, 0);
+    // .filter(mov => mov < 0)
+    .reduce((acc, cur) => cur < 0 && acc + cur, 0);
   labelSumOut.textContent = `${Math.abs(out)} €`;
 
   const interest = acc.movements
@@ -198,7 +198,7 @@ btnLoan.addEventListener('click', e => {
   inputLoanAmount.value = '';
 });
 
-console.log(accounts);
+// console.log(accounts);
 
 const deposit = depo => {
   return depo.filter(mov => mov > 0);
@@ -380,3 +380,80 @@ const currencies = new Map([
 
 // const arr = [[1, 2, 3], [4, 5, 6], 7, 8];
 // console.log(arr.flat());
+
+// //////////////////////////////////////////////////////////////////////////
+
+// Array practrice
+
+// const bankDepositSum = accounts
+//   .map(acc => acc.movements)
+//   .flat()
+//   .filter(mov => mov > 0)
+//   .reduce((acc, cur) => acc + cur, 0);
+
+// console.log(bankDepositSum);
+
+// // Reduce method create object
+
+// const { deposits, withdrawals } = accounts
+//   .flatMap(acc => acc.movements)
+//   .reduce(
+//     (sum, cur) => {
+//       // cur > 0 ? (sum.deposits += cur) : (sum.withdrawals += cur);
+//       sum[cur > 0 ? 'deposits' : 'withdrawals'] += cur;
+//       return sum;
+//     },
+//     { deposits: 0, withdrawals: 0 }
+//   );
+
+// console.log(deposits, withdrawals);
+
+// // Convert  title case
+
+// const convertTitleCase = title => {
+//   const exceptions = ['a', 'an', 'the', 'and', 'but', 'or', 'on', 'with', 'am'];
+//   return title
+//     .toLowerCase()
+//     .split(' ')
+//     .map(word =>
+//       exceptions.includes(word) ? word : word[0].toUpperCase() + word.slice(1)
+//     )
+//     .join(' ');
+// };
+
+// console.log(convertTitleCase('hello i am RONY'));
+
+//////////////////////////////////////////////////////////////////////////////////////////
+
+const dogFood = dogs => {
+  dogs.forEach(dog => (dog.recommendedFood = dog.weight ** 0.75 * 28));
+
+  const sarah = dogs.find(dog => dog.owners.some(value => value === 'Sarah'));
+
+  sarah.curFood > sarah.recommendedFood
+    ? console.log('its eating too much')
+    : console.log('its eating too little');
+
+  const ownersEatTooMuch = [];
+  const ownersEatTooLittle = [];
+
+  dogs.map(dog =>
+    dog.curFood > dog.recommendedFood
+      ? ownersEatTooMuch.push(dog.owners)
+      : ownersEatTooLittle.push(dog.owners)
+  );
+
+  // ownersEatTooMuch.flat();
+
+  return dogs;
+};
+
+const dog = [
+  { weight: 22, curFood: 250, owners: ['Alice', 'Bob'] },
+  { weight: 8, curFood: 200, owners: ['Matilda'] },
+  { weight: 13, curFood: 275, owners: ['Sarah', 'John'] },
+  { weight: 32, curFood: 340, owners: ['Michael'] },
+];
+
+console.log(dogFood(dog));
+// console.log(dog);
